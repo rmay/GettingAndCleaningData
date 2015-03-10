@@ -1,0 +1,95 @@
+Codebook
+========
+Codebook was generated on `r as.character(Sys.time())` during the same process that generated the dataset.
+
+Dataset generation process
+======
+
+1. Merges the training and the test sets to create one data set.
+   * Download the data and unzip
+   * Slurp in all the data for test and training
+   * For example:
+       - data_Y_test <- read.table(file.path(test_path, "y_test.txt"), header = FALSE)
+       - data_X_test <- read.table(file.path(test_path, "X_test.txt"), header = FALSE)
+       - data_subject_test <- read.table(file.path(test_path, "subject_test.txt"), header = FALSE)
+
+   * I used dplyr to bind data together
+       - data_features <- rbind_list(data_X_test, data_X_train)
+
+   * Rename labels
+   * Finally, merge everything together
+       - final_data <- bind_cols(data_subject, data_activity, data_features)
+
+2. Extracts only the measurements on the mean and standard deviation for each measurement. 
+   * I ran make.names on the dataset to ensure uniqueness
+   * Then I extracted just the requested mean and standard deviation
+
+3. Uses descriptive activity names to name the activities in the data set
+   * Convert the activites file data into a factor and replace those ids in the dataset, use the second column from the file for the description
+
+4. Appropriately labels the data set with descriptive variable names.
+   * I did some renaming like these:
+       - names(extracted_data) <- gsub("std", "Standard.deviation", names(extracted_data))
+       - names(extracted_data) <- gsub("mean", "Mean", names(extracted_data))
+
+5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+   * tidy_data <- extracted_data %>%
+  group_by(subject, activity) %>%
+  summarise_each(funs(mean))
+
+   * Save the tidy_data to a text file in the working directory
+   * write.table(tidy_data, file = "tidy_data.txt", row.names = FALSE)
+
+Feature Selection 
+-----------------
+
+The features selected for this database come from the accelerometer and gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (tBodyAcc-XYZ and tGravityAcc-XYZ) using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
+
+Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerk-XYZ and tBodyGyroJerk-XYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag). 
+
+Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAcc-XYZ, fBodyAccJerk-XYZ, fBodyGyro-XYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals). 
+
+These signals were used to estimate variables of the feature vector for each pattern:  
+'-XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
+
+As part of the process, the features are renamed.
+
+Variable portion  | Renamed
+------------------|------------
+'std'             | Standard.deviation
+'mean'            | Mean
+'t'               | Time
+'f'               | FFT
+'Acc'             | Accelerometer
+'Gyro'            | Gyroscope
+'Mag'             | Magnitude
+'BodyBody'        | Body
+
+
+Dataset structure
+-----------------
+
+```{r}
+str(tidy_data)
+```
+
+List the variable names in the data table
+----------------------------------------
+
+```{r}
+names(tidy_data)
+```
+
+Show a few rows of the dataset
+------------------------------
+
+```{r}
+head(tidy_data, 2)
+```
+
+Summary of variables
+--------------------
+
+```{r}
+summary(tidy_data)
+```
