@@ -28,7 +28,7 @@ Project instructions
 Steps to reproduce this project
 -------------------------------
 1. Open the R script 'run_analysis.r' into R-Studio for best results.
-2. Set Session -> Set Working Directory to the where the script is saved.
+2. Change setwd to the where the script is saved.
 3. Run the R script 'run_analysis.r'.
 
 
