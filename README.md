@@ -35,4 +35,5 @@ Steps to reproduce this project
 Outputs
 ----------------
 1. Tidy dataset file 'tidy_data.txt'
+2. codebook.md generated at the end of run_analysis.r and from makeCodebook.Rmd
 
